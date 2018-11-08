@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2003
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "AzurePAW-POC-DNSServer", "AzurePAW-POC-DNSServer\AzurePAW-POC-DNSServer.deployproj", "{F7416F04-E00E-4692-B76C-DEEC25BBDB78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F7416F04-E00E-4692-B76C-DEEC25BBDB78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7416F04-E00E-4692-B76C-DEEC25BBDB78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7416F04-E00E-4692-B76C-DEEC25BBDB78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7416F04-E00E-4692-B76C-DEEC25BBDB78}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {89DBFAAE-76C2-4695-863B-6470D01DCC63}
+	EndGlobalSection
+EndGlobal
