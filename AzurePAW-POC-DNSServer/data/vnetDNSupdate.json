@@ -8,18 +8,7 @@
         "description": "The name of the Virtual Network"
       }
     },
-    "virtualNetworkAddressRange": {
-      "type": "string",
-      "metadata": {
-        "description": "The address range of the VNET in CIDR format"
-      }
-    },
-    "subnets": {
-      "type": "array",
-      "metadata": {
-        "description": "The subnet definition for the VNET"
-      }
-    },
+    
     "DNSServerAddress": {
       "type": "array",
       "metadata": {
@@ -34,13 +23,8 @@
       "name": "[parameters('virtualNetworkName')]",
       "type": "Microsoft.Network/virtualNetworks",
       "location": "[resourceGroup().location]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2018-08-01",
       "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('virtualNetworkAddressRange')]"
-          ]
-        },
         "dhcpOptions": {
           "dnsServers": "[parameters('DNSServerAddress')]"
         }

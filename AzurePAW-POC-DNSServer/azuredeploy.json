@@ -83,6 +83,7 @@
     "OSVersion": "2016-Datacenter",
 
     "dnsServerSubnetName": "[concat(parameters('subnetName'),parameters('existingVirtualNetworkResourceGroup'))]",
+
     "subnetResourceID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'),  variables('dnsServerSubnetName'))]",
     "dnsServerIpAddress": "(parameters('serverIPAddress')",
     "virtualNetworkAddressRange": "(parameters('virtualNetworkAddressRange')",
@@ -148,7 +149,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[variables('deployPrimaryAdId')]"
+        "[variables('dnsVmDeploymentId')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -160,9 +161,7 @@
           "virtualNetworkName": {
             "value": "[parameters('existingVirtualNetworkName')]"
           },
-          "virtualNetworkAddressRange": {
-            "value": "[variables('virtualNetworkAddressRange')]"
-          },
+          
          "dnsServerAddress": {
             "value": [ "[variables('dnsServerIpAddress')]" ]
           }
