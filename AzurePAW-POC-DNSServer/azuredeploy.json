@@ -76,7 +76,7 @@
     "VMSize": "[parameters('VirtualMachineSize')]",
     "OSVersion": "2016-Datacenter",
 
-    "subnetResourceID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'),  parameters('dnsServerSubnetName'))]",
+    "subnetResourceID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'), parameters('dnsServerSubnetName'))]",
     "dnsServerIpAddress": "(parameters('serverIPAddress')",
 
     "dnsServerTemplateURL": "[concat(variables('assetLocation'),'/data/ServerVm.json')]",
