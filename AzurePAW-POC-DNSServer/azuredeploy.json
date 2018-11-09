@@ -1,8 +1,178 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {},
-  "variables": {},
-  "resources": [],
+  "parameters": {
+
+    "domainName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the domain to which DNS will be configured with conditional forwarding"
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Administrator of the new VMs and Domain"
+      },
+      "defaultValue": "labadmin"
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The password for the Administrator account of the new VMs and Domain. If you do not change it, then it will look like this: Subscription#SUBSCRIPTIONID"
+      },
+      "defaultValue": "[concat('Subscription#',subscription().subscriptionId)]"
+    },
+    "VirtualMachineSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_DS12_v2",
+        "Standard_A2"
+      ],
+      "metadata": {
+        "description": "VM Size. The bigger it is, the more $ you will spend."
+      },
+      "defaultValue": "Standard_A2"
+    },
+    "existingVirtualNetworkName": {
+      "type": "string",
+      "defaultValue": "ADVNET",
+      "metadata": {
+        "description": "Specify the name for the vNet to whcih this swerver will be deployed."
+      }
+    },
+    "existingVirtualNetworkResourceGroup": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]",
+      "metadata": {
+        "description": "Name of the existing VNET resource group"
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "defaultValue": "DNSServerSubnet",
+      "metadata": {
+        "description": "Name of the subnet in the virtual network you want to put this VM"
+      }
+    },
+    "VMName": {
+      "type": "string",
+      "metadata": {
+        "description": "Must be compliant with Windows Server naming convention"
+      },
+      "defaultValue": "DNS-LAB"
+    },
+    "serverIPAddress": {
+      "type": "string",
+      "metadata": {
+        "description": "Specify IP addess of the server in that target subnet"
+      }
+    },
+    "virtualNetworkAddressRange": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/16",
+      "metadata": {
+        "description": "Specify IP addess range for the existing vNet where this DNS server will be implemented"
+      }
+    }
+  },
+  "variables": {
+    "assetLocation": "https://raw.githubusercontent.com/dmitriilezine/AzurePAW-POC-DNSServer/master/AzurePAW-POC-DNSServer",
+
+    "VMSize": "[parameters('VirtualMachineSize')]",
+    "OSVersion": "2016-Datacenter",
+
+    "dnsServerSubnetName": "[concat(parameters('subnetName'),resourceGroup().name)]",
+    "subnetResourceID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'),  variables('dnsServerSubnetName'))]",
+    "dnsServerIpAddress": "(parameters('serverIPAddress')",
+    "virtualNetworkAddressRange": "(parameters('virtualNetworkAddressRange')",
+
+
+    "dnsServerTemplateURL": "[concat(variables('assetLocation'),'/data/ServerVm.json')]",
+    "dnsVMName": "[parameters('VMName')]",
+    "updateVNetDNS1": "UpdateVNetDNS",
+
+    "vnetwithDNSTemplateURL": "[concat(variables('assetLocation'),'/data/vnetDNSupdate.json')]",
+
+    "dnsVmDeployment": "CreateDNSVM",
+    "dnsVmDeploymentId": "[concat('Microsoft.Resources/deployments/', variables('dnsVmDeployment'))]",
+
+    "imageOffer": "WindowsServer",
+    "imagePublisher": "MicrosoftWindowsServer",
+
+    "dnsNICName": "[concat('DNS-Nic',resourceGroup().name)]"
+  },
+  "resources": [
+
+    {
+      "name": "[variables('dnsVmDeployment')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('dnsServerTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "subnetResourceID": {
+            "value": "[variables('subnetResourceID')]"
+          },
+          "windowsImageSKU": {
+            "value": "[variables('OSVersion')]"
+          },
+          "vmName": {
+            "value": "[variables('dnsVMName')]"
+          },
+          "vmSize": {
+            "value": "[variables('VMSize')]"
+          },
+          "nicName": {
+            "value": "[variables('dnsNICName')]"
+          },
+          "primaryIpAddress": {
+            "value": "[variables('dnsServerIpAddress')]"
+          }
+        }
+      }
+    },
+    
+    {
+      "name": "[variables('updateVNetDNS1')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[variables('deployPrimaryAdId')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('vnetwithDNSTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "virtualNetworkName": {
+            "value": "[parameters('existingVirtualNetworkName')]"
+          },
+          "virtualNetworkAddressRange": {
+            "value": "[variables('virtualNetworkAddressRange')]"
+          },
+          "subnets": {
+            "value": "[variables('subnets')]"
+          },
+          "dnsServerAddress": {
+            "value": [ "[variables('dnsServerIpAddress')]" ]
+          }
+        }
+      }
+    }
+
+  ],
   "outputs": {}
 }
