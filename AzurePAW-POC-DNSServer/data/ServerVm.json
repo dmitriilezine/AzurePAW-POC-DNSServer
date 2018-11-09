@@ -83,7 +83,7 @@
   "variables": {},
   "resources": [
     {
-      "name": "[parameters('jumpNicName')]",
+      "name": "[parameters('nicName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-05-01-preview",
@@ -108,7 +108,7 @@
       "location": "[resourceGroup().location]",
       "apiVersion": "2017-03-30",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces',parameters('jumpNicName'))]"
+        "[resourceId('Microsoft.Network/networkInterfaces',parameters('nicName'))]"
       ],
       "properties": {
         "hardwareProfile": {
@@ -144,7 +144,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('jumpNicName'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('nicName'))]"
             }
           ]
         }
