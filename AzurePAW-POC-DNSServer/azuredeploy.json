@@ -78,10 +78,12 @@
 
     "subnetResourceID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'),  parameters('dnsServerSubnetName'))]",
     "dnsServerIpAddress": "(parameters('serverIPAddress')",
-    
+
     "dnsServerTemplateURL": "[concat(variables('assetLocation'),'/data/ServerVm.json')]",
     "dnsVMName": "[parameters('VMName')]",
-    "updateVNetDNS1": "UpdateVNetDNS",
+
+    "deployDNSVM": "DeployDNSVM",
+    "deployDNSVMId": "[concat('Microsoft.Resources/deployments/', variables('deployDNSVM'))]",
 
     "imageOffer": "WindowsServer",
     "imagePublisher": "MicrosoftWindowsServer",
@@ -91,7 +93,7 @@
   "resources": [
 
     {
-      "name": "[variables('dnsVmDeployment')]",
+      "name": "[variables('deployDNSVM')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "properties": {
