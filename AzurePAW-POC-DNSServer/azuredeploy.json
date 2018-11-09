@@ -77,7 +77,7 @@
     "OSVersion": "2016-Datacenter",
 
     "subnetResourceID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'), parameters('dnsServerSubnetName'))]",
-    "dnsServerIpAddress": "(parameters('serverIPAddress')",
+    "dnsServerIpAddress": "parameters('serverIPAddress')",
 
     "dnsServerTemplateURL": "[concat(variables('assetLocation'),'/data/ServerVm.json')]",
     "dnsVMName": "[parameters('VMName')]",
