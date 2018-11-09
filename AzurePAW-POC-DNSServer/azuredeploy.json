@@ -163,10 +163,7 @@
           "virtualNetworkAddressRange": {
             "value": "[variables('virtualNetworkAddressRange')]"
           },
-          "subnets": {
-            "value": "[variables('subnets')]"
-          },
-          "dnsServerAddress": {
+         "dnsServerAddress": {
             "value": [ "[variables('dnsServerIpAddress')]" ]
           }
         }
