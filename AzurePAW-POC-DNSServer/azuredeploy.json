@@ -64,6 +64,7 @@
     },
     "serverIPAddress": {
       "type": "string",
+      "defaultValue": "10.0.10.4",
       "metadata": {
         "description": "Specify IP addess of the server in that target subnet"
       }
