@@ -26,7 +26,6 @@
     <Content Include="azuredeploy.json" />
     <Content Include="azuredeploy.parameters.json" />
     <None Include="data\ServerVm.json" />
-    <None Include="data\vnetDNSupdate.json" />
     <None Include="Deployment.targets">
       <Visible>False</Visible>
     </None>
