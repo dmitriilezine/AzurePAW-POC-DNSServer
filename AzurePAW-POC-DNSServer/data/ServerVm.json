@@ -189,6 +189,9 @@
       "name": "[concat('VMDiagnosticsSettings-',parameters('vmName'))]",
       "apiVersion": "2017-12-01",
       "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines',parameters('vmName'))]"
+      ],
       "properties": {
         "publisher": "Microsoft.Azure.Diagnostics",
         "type": "IaaSDiagnostics",
@@ -424,13 +427,8 @@
           "storageAccountKey": "[listKeys(parameters('diagnosticsStorageAccountId'),'2015-06-15').key1]",
           "storageAccountEndPoint": "https://core.windows.net/"
         }
-      },
-      "dependsOn": [
-        "nodeCopy"
-      ]
+      }
     }
-
-
 
   ],
   "outputs": {}
