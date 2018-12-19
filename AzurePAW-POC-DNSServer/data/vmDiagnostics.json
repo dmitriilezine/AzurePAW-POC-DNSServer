@@ -20,7 +20,7 @@
   "variables": {  },
   "resources": [
     {
-      "name": "[concat(parameters('vmName'),'Microsoft.Insights.VMDiagnosticsSettings')]",
+      "name": "[concat(parameters('vmName'),'/VMDiagnosticsSettings')]",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "apiVersion": "2015-06-15",
       "location": "[resourceGroup().location]",
