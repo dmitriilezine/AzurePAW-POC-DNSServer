@@ -21,7 +21,7 @@
   "resources": [
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(variables('vmName'),'Microsoft.Insights.VMDiagnosticsSettings')]",
+      "name": "[concat(parameters('vmName'),'Microsoft.Insights.VMDiagnosticsSettings')]",
       "apiVersion": "2017-12-01",
       "location": "[resourceGroup().location]",
 
