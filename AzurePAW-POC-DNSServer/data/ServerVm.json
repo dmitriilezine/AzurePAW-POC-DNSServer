@@ -150,7 +150,7 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[parameters('diagnosticsStorageAccountName')]"
+            "storageUri": "[concat('https://',parameters('diagnosticsStorageAccountName'),'/')]"
           }
         },
         "networkProfile": {

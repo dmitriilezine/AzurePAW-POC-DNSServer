@@ -36,7 +36,7 @@
         "description": "Specify the name for the vNet to whcih this swerver will be deployed."
       }
     },
-    "existingVirtualNetworkResourceGroup": {
+    "existingVirtualNetworkRG": {
       "type": "string",
       "defaultValue": "Add vNet RG Name",
       "metadata": {
@@ -79,7 +79,7 @@
     "VMSize": "[parameters('VirtualMachineSize')]",
     "OSVersion": "2016-Datacenter",
 
-    "subnetResourceID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'), parameters('dnsServerSubnetName'))]",
+    "subnetResourceID": "[resourceId(parameters('existingVirtualNetworkRG'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'), parameters('dnsServerSubnetName'))]",
     "dnsServerIpAddress": "[parameters('serverIPAddress')]",
 
     "dnsServerTemplateURL": "[concat(variables('assetLocation'),'/data/ServerVm.json')]",
