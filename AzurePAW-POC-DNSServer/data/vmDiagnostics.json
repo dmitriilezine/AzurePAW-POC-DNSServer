@@ -9,15 +9,24 @@
         "description": "The VM Name"
       }
     },
-
     "diagnosticsStorageAccountName": {
       "type": "string",
       "metadata": {
         "description": "Storage account for VM diagnostics"
       }
+    },
+    "existingdiagnosticsStorageResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage account RG"
+      }
     }
   },
-  "variables": {  },
+
+  "variables": {
+    "accountid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/',parameters('existingdiagnosticsStorageResourceGroup'), '/providers/','Microsoft.Storage/storageAccounts/', parameters('existingdiagnosticsStorageAccountName'))]"
+
+  },
   "resources": [
     {
       "name": "[concat(parameters('vmName'),'/VMDiagnosticsSettings')]",
@@ -257,7 +266,7 @@
         },
         "protectedSettings": {
           "storageAccountName": "[parameters('diagnosticsStorageAccountName')]",
-          "storageAccountKey": "[listKeys(parameters('diagnosticsStorageAccountId'),'2015-06-15').key1]",
+          "storageAccountKey": "[listKeys(variables('accountid'),'2015-06-15').key1]",
           "storageAccountEndPoint": "https://core.windows.net/"
         }
       }

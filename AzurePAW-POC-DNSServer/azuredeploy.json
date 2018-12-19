@@ -70,6 +70,13 @@
       "metadata": {
         "description": "Specify storage account that will be used for VM diagnostics"
       }
+    },
+    "StorageAccountRG": {
+      "type": "string",
+      "defaultValue": "RG where Storage account is located",
+      "metadata": {
+        "description": "Specify storage account RG"
+      }
     }
 
   },
@@ -158,6 +165,9 @@
           },
           "diagnosticsStorageAccountName": {
             "value": "[parameters('diagnosticsStorageAccountName')]"
+          },
+          "existingdiagnosticsStorageResourceGroup": {
+            "value": "[parameters('StorageAccountRG')]"
           }
         }
       }
