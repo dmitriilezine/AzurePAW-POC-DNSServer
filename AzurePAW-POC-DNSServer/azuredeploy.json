@@ -83,10 +83,13 @@
     "dnsServerIpAddress": "[parameters('serverIPAddress')]",
 
     "dnsServerTemplateURL": "[concat(variables('assetLocation'),'/data/ServerVm.json')]",
+    "vmDiagnosticsTemplateURL": "[concat(variables('assetLocation'),'/data/vmDiagnostics.json')]",
     "dnsVMName": "[parameters('VMName')]",
 
     "deployDNSVM": "DeployDNSVM",
     "deployDNSVMId": "[concat('Microsoft.Resources/deployments/', variables('deployDNSVM'))]",
+    "deployVMDiagnostics": "deployVMDiagnostics",
+    "deployVMDiagnosticsId": "[concat('Microsoft.Resources/deployments/', variables('deployVMDiagnostics'))]",
 
     "imageOffer": "WindowsServer",
     "imagePublisher": "MicrosoftWindowsServer",
@@ -135,8 +138,32 @@
           }
         }
       }
+    },
+    {
+      "name": "[variables('deployVMDiagnostics')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[variables('deployDNSVM')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('vmDiagnosticsTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[variables('dnsVMName')]"
+          },
+          "diagnosticsStorageAccountName": {
+            "value": "[parameters('diagnosticsStorageAccountName')]"
+          }
+        }
+      }
     }
-    
+
+
   ],
   "outputs": {}
 }
