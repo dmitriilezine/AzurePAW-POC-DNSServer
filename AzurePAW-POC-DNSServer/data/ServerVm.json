@@ -78,6 +78,12 @@
         "description": "The Version of Windows Image"
       },
       "defaultValue": "latest"
+    },
+    "diagnosticsStorageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage account for VM diagnostics"
+      }
     }
   },
   "variables": {},
@@ -86,7 +92,7 @@
       "name": "[parameters('nicName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2018-10-01",
       "properties": {
         "ipConfigurations": [
           {
@@ -106,7 +112,7 @@
       "name": "[parameters('vmName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
-      "apiVersion": "2017-03-30",
+      "apiVersion": "2018-10-01",
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces',parameters('nicName'))]"
       ],
@@ -140,6 +146,12 @@
               "lun": 0
             }
           ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true,
+            "storageUri": "[parameters('diagnosticsStorageAccountName')]"
+          }
         },
         "networkProfile": {
           "networkInterfaces": [

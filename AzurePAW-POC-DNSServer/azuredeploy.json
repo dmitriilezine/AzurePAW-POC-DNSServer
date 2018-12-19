@@ -63,6 +63,13 @@
       "metadata": {
         "description": "Specify IP addess of the server in that target subnet"
       }
+    },
+    "diagnosticsStorageAccountName": {
+      "type": "string",
+      "defaultValue": "yourstorageaccount.blob.core.windows.net",
+      "metadata": {
+        "description": "Specify storage account that will be used for VM diagnostics"
+      }
     }
 
   },
@@ -122,6 +129,9 @@
           },
           "primaryIpAddress": {
             "value": "[variables('dnsServerIpAddress')]"
+          },
+          "diagnosticsStorageAccountName": {
+            "value": "[parameters('diagnosticsStorageAccountName')]"
           }
         }
       }
