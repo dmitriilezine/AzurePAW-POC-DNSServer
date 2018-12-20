@@ -91,12 +91,17 @@
 
     "dnsServerTemplateURL": "[concat(variables('assetLocation'),'/data/ServerVm.json')]",
     "vmDiagnosticsTemplateURL": "[concat(variables('assetLocation'),'/data/vmDiagnostics.json')]",
+    "vmAntimalwareTemplateURL": "[concat(variables('assetLocation'),'/data/deployAntimalware.json')]",
+
     "dnsVMName": "[parameters('VMName')]",
 
     "deployDNSVM": "DeployDNSVM",
     "deployDNSVMId": "[concat('Microsoft.Resources/deployments/', variables('deployDNSVM'))]",
     "deployVMDiagnostics": "deployVMDiagnostics",
     "deployVMDiagnosticsId": "[concat('Microsoft.Resources/deployments/', variables('deployVMDiagnostics'))]",
+    "deployAntimalware": "deployAntimalware",
+    "deployAntimalwareId": "[concat('Microsoft.Resources/deployments/', variables('deployAntimalware'))]",
+
 
     "imageOffer": "WindowsServer",
     "imagePublisher": "MicrosoftWindowsServer",
@@ -179,8 +184,27 @@
           }
         }
       }
+    },
+    {
+      "name": "[variables('deployAntimalware')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[variables('deployDNSVM')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('vmAntimalwareTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[variables('dnsVMName')]"
+          }
+        }
+      }
     }
-
 
   ],
   "outputs": {}
