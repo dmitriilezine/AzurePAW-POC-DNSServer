@@ -66,7 +66,7 @@
     },
     "diagnosticsStorageAccountName": {
       "type": "string",
-      "defaultValue": "https://yourstorageaccount.blob.core.windows.net/",
+      "defaultValue": "RealStorageAccountName",
       "metadata": {
         "description": "Specify storage account that will be used for VM diagnostics"
       }
@@ -92,6 +92,7 @@
     "dnsServerTemplateURL": "[concat(variables('assetLocation'),'/data/ServerVm.json')]",
     "vmDiagnosticsTemplateURL": "[concat(variables('assetLocation'),'/data/vmDiagnostics.json')]",
     "vmAntimalwareTemplateURL": "[concat(variables('assetLocation'),'/data/deployAntimalware.json')]",
+    "vmADETemplateURL": "[concat(variables('assetLocation'),'/data/encryptVM.json')]",
 
     "dnsVMName": "[parameters('VMName')]",
 
@@ -109,7 +110,6 @@
     "dnsNICName": "[concat('DNS-Nic',resourceGroup().name)]",
 
     "accountid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/',parameters('StorageAccountRG'), '/providers/','Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName'))]",
-    "accountid111": "[concat('Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName'))]",
     "vmResourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
 
   },
@@ -156,6 +156,8 @@
         }
       }
     },
+
+
     {
       "name": "[variables('deployVMDiagnostics')]",
       "type": "Microsoft.Resources/deployments",
