@@ -15,7 +15,14 @@
         "description": "Storage account for VM diagnostics"
       }
     },
-    "existingdiagnosticsStorageResourceGroup": {
+   
+    "accountid": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage account RG"
+      }
+    },
+    "vmResourceId": {
       "type": "string",
       "metadata": {
         "description": "Storage account RG"
@@ -23,10 +30,7 @@
     }
   },
 
-  "variables": {
-    "accountid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/',parameters('existingdiagnosticsStorageResourceGroup'), '/providers/','Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName'))]"
-
-  },
+  "variables": {  },
   "resources": [
     {
       "name": "[concat(parameters('vmName'),'/VMDiagnosticsSettings')]",
@@ -45,7 +49,7 @@
             "DiagnosticMonitorConfiguration": {
               "overallQuotaInMB": 5120,
               "Metrics": {
-                "resourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/', 'Microsoft.Compute/virtualMachines/', parameters('vmName'))]",
+                "resourceId": "[parameters('vmResourceId')]",
                 "MetricAggregation": [
                   {
                     "scheduledTransferPeriod": "PT1H"
@@ -266,7 +270,7 @@
         },
         "protectedSettings": {
           "storageAccountName": "[parameters('diagnosticsStorageAccountName')]",
-          "storageAccountKey": "[listKeys(variables('accountid'),'2015-06-15').key1]",
+          "storageAccountKey": "[listKeys(parameters('accountid'),'2015-06-15').key1]",
           "storageAccountEndPoint": "https://core.windows.net/"
         }
       }

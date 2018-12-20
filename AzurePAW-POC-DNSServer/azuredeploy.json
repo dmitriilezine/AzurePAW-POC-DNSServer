@@ -101,7 +101,11 @@
     "imageOffer": "WindowsServer",
     "imagePublisher": "MicrosoftWindowsServer",
 
-    "dnsNICName": "[concat('DNS-Nic',resourceGroup().name)]"
+    "dnsNICName": "[concat('DNS-Nic',resourceGroup().name)]",
+
+    "accountid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/',parameters('StorageAccountRG'), '/providers/','Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName'))]",
+    "vmResourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/', 'Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+
   },
   "resources": [
 
@@ -166,8 +170,11 @@
           "diagnosticsStorageAccountName": {
             "value": "[parameters('diagnosticsStorageAccountName')]"
           },
-          "existingdiagnosticsStorageResourceGroup": {
-            "value": "[parameters('StorageAccountRG')]"
+          "accountid": {
+            "value": "[variables('accountid')]"
+          },
+          "vmResourceId": {
+            "value": "[variables('vmResourceId')]"
           }
         }
       }
