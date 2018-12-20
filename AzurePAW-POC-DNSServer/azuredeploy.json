@@ -103,8 +103,8 @@
 
     "dnsNICName": "[concat('DNS-Nic',resourceGroup().name)]",
 
-    "accountid": "[concat('/Subscriptions/', subscription().subscriptionId, '/resourceGroups/',parameters('StorageAccountRG'), '/providers/','Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName'))]",
-    "vmResourceId": "[concat('/suBscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/', 'Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+    "accountid": "[concat('/Subcriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('StorageAccountRG'), '/providers/Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName'))]",
+    "vmResourceId": "[concat('/suBscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
 
   },
   "resources": [
