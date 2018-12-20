@@ -49,7 +49,7 @@
             "DiagnosticMonitorConfiguration": {
               "overallQuotaInMB": 5120,
               "Metrics": {
-                "resourceId": "[parameters('vmResourceId')]",
+                "resourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]",
                 "MetricAggregation": [
                   {
                     "scheduledTransferPeriod": "PT1H"
