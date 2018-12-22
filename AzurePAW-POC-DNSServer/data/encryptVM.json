@@ -19,7 +19,7 @@
 
   "variables": {
     "sequenceVersion": "[concat('guid', uniqueString(resourceGroup().id))]",
-    "extensionVersion": "1.0",
+    "extensionVersion": "2.2",
     "encryptionOperation": "EnableEncryption",
     "keyEncryptionAlgorithm": "RSA-OAEP",
     "keyVaultURL": "[concat('https://', parameters('adeKeyVaultName'), '.vault.azure.net/')]"
@@ -34,7 +34,7 @@
       "location": "[resourceGroup().location]",
       "properties": {
         "publisher": "Microsoft.Azure.Security",
-        "type": "AzureDiskEncryptionForWindows",
+        "type": "AzureDiskEncryption",
         "typeHandlerVersion": "[variables('extensionVersion')]",
         "autoUpgradeMinorVersion": true,
 
