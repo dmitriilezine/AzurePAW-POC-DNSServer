@@ -22,9 +22,8 @@
     "extensionVersion": "1.0",
     "encryptionOperation": "EnableEncryption",
     "keyEncryptionAlgorithm": "RSA-OAEP",
-    "keyVaultURL": "[concat('https://', parameters('adeKeyVaultName'), '.vault.azure.net/')]",
-    "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroup'),'/providers/Microsoft.KeyVault/vaults/', parameters('adeKeyVaultName'))]"
-
+    "keyVaultURL": "[concat('https://', parameters('adeKeyVaultName'), '.vault.azure.net/')]"
+    
   },
   "resources": [
 

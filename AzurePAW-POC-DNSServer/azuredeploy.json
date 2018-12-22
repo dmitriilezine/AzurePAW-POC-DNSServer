@@ -77,6 +77,12 @@
       "metadata": {
         "description": "Specify storage account RG"
       }
+    },
+    "adeKeyVaultName": {
+      "type": "string",
+      "metadata": {
+        "description": "Key Vault Name used for Azure Disk Encryption for this VM. Must be in the same region as this VM"
+      }
     }
 
   },
@@ -102,7 +108,8 @@
     "deployVMDiagnosticsId": "[concat('Microsoft.Resources/deployments/', variables('deployVMDiagnostics'))]",
     "deployAntimalware": "deployAntimalware",
     "deployAntimalwareId": "[concat('Microsoft.Resources/deployments/', variables('deployAntimalware'))]",
-
+    "encryptVM": "encryptVM",
+    "encryotVMId": "[concat('Microsoft.Resources/deployments/', variables('encryptVM'))]",
 
     "imageOffer": "WindowsServer",
     "imagePublisher": "MicrosoftWindowsServer",
@@ -156,7 +163,30 @@
         }
       }
     },
+    {
+      "name": "[variables('encryptVM')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[variables('deployDNSVM')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('vmADETemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[variables('dnsVMName')]"
+          },
+          "adeKeyVaultName": {
+            "value": "[parameters('adeKeyVaultName')]"
+          }
+        }
 
+      }
+    },
 
     {
       "name": "[variables('deployVMDiagnostics')]",
