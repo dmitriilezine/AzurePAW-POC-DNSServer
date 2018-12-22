@@ -47,7 +47,8 @@
         "autoUpgradeMinorVersion": true,
         "forceUpdateTag": "[variables('forceUpdateTag')]",
         "settings": {
-          "KeyVaultURL": "[variables('keyVaultURL')]",
+          
+          "KeyVaultURL": "[reference(variables('keyVaultResourceID111'),'2016-10-01').vaultUri]",
           "KeyEncryptionAlgorithm": "[variables('keyEncryptionAlgorithm')]",
           "VolumeType": "All",
           "EncryptionOperation": "[variables('encryptionOperation')]",
