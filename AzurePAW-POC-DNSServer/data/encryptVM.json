@@ -29,9 +29,7 @@
     "encryptionOperation": "EnableEncryption",
     "keyEncryptionAlgorithm": "RSA-OAEP",
     "forceUpdateTag": "1.0",
-    "keyVaultURL": "[concat('https://', parameters('adeKeyVaultName'), '.vault.azure.net/')]",
-    "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroup'),'/providers/Microsoft.KeyVault/vaults/', parameters('adeKeyVaultName'))]",
-    "keyVaultResourceID111": "[resourceId(parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults/', parameters('adeKeyVaultName'))]"
+    "keyVaultResourceID": "[resourceId(parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults/', parameters('adeKeyVaultName'))]"
   },
   "resources": [
 
@@ -48,11 +46,11 @@
         "forceUpdateTag": "[variables('forceUpdateTag')]",
         "settings": {
           
-          "KeyVaultURL": "[reference(variables('keyVaultResourceID111'),'2016-10-01').vaultUri]",
+          "KeyVaultURL": "[reference(variables('keyVaultResourceID'),'2016-10-01').vaultUri]",
           "KeyEncryptionAlgorithm": "[variables('keyEncryptionAlgorithm')]",
           "VolumeType": "All",
           "EncryptionOperation": "[variables('encryptionOperation')]",
-          "KeyVaultResourceId": "[variables('keyVaultResourceID111')]"
+          "KeyVaultResourceId": "[variables('keyVaultResourceID')]"
         },
         "protectedSettings": {
 
