@@ -37,12 +37,13 @@
         "type": "AzureDiskEncryptionForWindows",
         "typeHandlerVersion": "[variables('extensionVersion')]",
         "autoUpgradeMinorVersion": true,
-        "sequenceVersion": "[variables('sequenceVersion')]",
+
         "settings": {
           "KeyVaultURL": "[variables('keyVaultURL')]",
           "KeyEncryptionAlgorithm": "[variables('keyEncryptionAlgorithm')]",
           "VolumeType": "All",
-          "EncryptionOperation": "[variables('encryptionOperation')]"
+          "EncryptionOperation": "[variables('encryptionOperation')]",
+          "SequenceVersion": "[variables('sequenceVersion')]"
         },
         "protectedSettings": {
 
