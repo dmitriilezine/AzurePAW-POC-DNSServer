@@ -189,7 +189,7 @@
             "value": "[parameters('adeKeyVaultName')]"
           },
           "keyVaultResourceGroup": {
-            "value": "[parameters('adeKeyVaultName')]"
+            "value": "[parameters('keyVaultResourceGroup')]"
           }
         }
 
