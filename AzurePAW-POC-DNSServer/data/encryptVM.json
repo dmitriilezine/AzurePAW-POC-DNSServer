@@ -28,6 +28,7 @@
     "extensionVersion": "2.2",
     "encryptionOperation": "EnableEncryption",
     "keyEncryptionAlgorithm": "RSA-OAEP",
+    "forceUpdateTag": "1.0",
     "keyVaultURL": "[concat('https://', parameters('adeKeyVaultName'), '.vault.azure.net/')]",
     "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroup'),'/providers/Microsoft.KeyVault/vaults/', parameters('adeKeyVaultName'))]",
     "keyVaultResourceID111": "[resourceId(parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults/', parameters('adeKeyVaultName'))]"
@@ -44,14 +45,13 @@
         "type": "AzureDiskEncryption",
         "typeHandlerVersion": "[variables('extensionVersion')]",
         "autoUpgradeMinorVersion": true,
-
+        "forceUpdateTag": "[variables('forceUpdateTag')]",
         "settings": {
           "KeyVaultURL": "[variables('keyVaultURL')]",
           "KeyEncryptionAlgorithm": "[variables('keyEncryptionAlgorithm')]",
           "VolumeType": "All",
           "EncryptionOperation": "[variables('encryptionOperation')]",
-          "SequenceVersion": "[variables('sequenceVersion')]",
-          "KeyVaultResourceId": "[variables('keyVaultResourceID')]"
+          "KeyVaultResourceId": "[variables('keyVaultResourceID111')]"
         },
         "protectedSettings": {
 
