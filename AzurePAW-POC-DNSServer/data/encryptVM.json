@@ -14,6 +14,12 @@
       "metadata": {
         "description": "The VM Name"
       }
+    },
+    "keyVaultResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "The VM Name"
+      }
     }
   },
 
@@ -22,15 +28,16 @@
     "extensionVersion": "2.2",
     "encryptionOperation": "EnableEncryption",
     "keyEncryptionAlgorithm": "RSA-OAEP",
-    "keyVaultURL": "[concat('https://', parameters('adeKeyVaultName'), '.vault.azure.net/')]"
-    
+    "keyVaultURL": "[concat('https://', parameters('adeKeyVaultName'), '.vault.azure.net/')]",
+    "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroup'),'/providers/Microsoft.KeyVault/vaults/', parameters('adeKeyVaultName'))]",
+    "keyVaultResourceID111": "[resourceId(parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults/', parameters('adeKeyVaultName'))]"
   },
   "resources": [
 
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('vmName'),'/AzureDiskEncryption')]",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2017-03-30",
       "location": "[resourceGroup().location]",
       "properties": {
         "publisher": "Microsoft.Azure.Security",
@@ -43,7 +50,8 @@
           "KeyEncryptionAlgorithm": "[variables('keyEncryptionAlgorithm')]",
           "VolumeType": "All",
           "EncryptionOperation": "[variables('encryptionOperation')]",
-          "SequenceVersion": "[variables('sequenceVersion')]"
+          "SequenceVersion": "[variables('sequenceVersion')]",
+          "KeyVaultResourceId": "[variables('keyVaultResourceID')]"
         },
         "protectedSettings": {
 

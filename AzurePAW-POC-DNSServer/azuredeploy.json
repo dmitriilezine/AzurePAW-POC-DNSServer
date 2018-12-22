@@ -83,8 +83,13 @@
       "metadata": {
         "description": "Key Vault Name used for Azure Disk Encryption for this VM. Must be in the same region as this VM"
       }
+    },
+    "keyVaultResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Key Vault RG"
+      }
     }
-
   },
   "variables": {
     "assetLocation": "https://raw.githubusercontent.com/dmitriilezine/AzurePAW-POC-DNSServer/master/AzurePAW-POC-DNSServer",
@@ -181,6 +186,9 @@
             "value": "[variables('dnsVMName')]"
           },
           "adeKeyVaultName": {
+            "value": "[parameters('adeKeyVaultName')]"
+          },
+          "keyVaultResourceGroup": {
             "value": "[parameters('adeKeyVaultName')]"
           }
         }
