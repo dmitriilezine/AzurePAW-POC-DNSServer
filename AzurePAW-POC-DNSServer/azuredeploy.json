@@ -84,16 +84,42 @@
         "description": "Key Vault Name used for Azure Disk Encryption for this VM. Must be in the same region as this VM"
       }
     },
-    "keyVaultResourceGroup": {
+    "adeKeyVaultResourceGroup": {
       "type": "string",
       "metadata": {
         "description": "Key Vault RG"
+      }
+    },
+    "ScriptsLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage account URL for scripts"
+      },
+      "defaultValue": "https://azurepaw.blob.core.windows.net"
+    },
+    "subscriptionID": {
+      "type": "string",
+      "metadata": {
+        "description": "Subscription ID is used to provide access path to the Secrets Key Vault"
+      },
+      "defaultValue": "Copy and Paste Subscription ID for Secrets Key Vault. It is provided on the instructions OneNote page."
+    },
+    "secretsVaultName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Key Vault where secrets are stored"
+      }
+    },
+    "secretsKeyVaultRG": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the RG where Key Vault is stored"
       }
     }
   },
   "variables": {
     "assetLocation": "https://raw.githubusercontent.com/dmitriilezine/AzurePAW-POC-DNSServer/master/AzurePAW-POC-DNSServer",
-
+    "assetLocationStorageAccount": "[parameters('ScriptsLocation')]",
     "VMSize": "[parameters('VirtualMachineSize')]",
     "OSVersion": "2016-Datacenter",
 
@@ -104,6 +130,7 @@
     "vmDiagnosticsTemplateURL": "[concat(variables('assetLocation'),'/data/vmDiagnostics.json')]",
     "vmAntimalwareTemplateURL": "[concat(variables('assetLocation'),'/data/deployAntimalware.json')]",
     "vmADETemplateURL": "[concat(variables('assetLocation'),'/data/encryptVM.json')]",
+    "activateDiskTemplateURL": "[concat(variables('assetLocation'),'/data/activateDisk.json')]",
 
     "dnsVMName": "[parameters('VMName')]",
 
@@ -115,6 +142,15 @@
     "deployAntimalwareId": "[concat('Microsoft.Resources/deployments/', variables('deployAntimalware'))]",
     "encryptVM": "encryptVM",
     "encryotVMId": "[concat('Microsoft.Resources/deployments/', variables('encryptVM'))]",
+    "activateDisk": "activateDisk",
+    "activateDiskId": "[concat('Microsoft.Resources/deployments/', variables('activateDisk'))]",
+
+    "secretsVaultName": "[parameters('secretsVaultName')]",
+    "secretName": "AzurePAWPOC1SAKey2",
+    "secretnameSASurl": "AzurePAWPOC1SAS",
+    "secretsKeyVaultRG": "[parameters('secretsKeyVaultRG')]",
+    "secretsKeyVaultID": "[concat('/subscriptions/', parameters('subscriptionID'), '/resourceGroups/', variables('secretsKeyVaultRG'), '/providers/Microsoft.KeyVault/vaults/', variables('secretsVaultName'))]",
+
 
     "imageOffer": "WindowsServer",
     "imagePublisher": "MicrosoftWindowsServer",
@@ -168,33 +204,7 @@
         }
       }
     },
-    {
-      "name": "[variables('encryptVM')]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "[variables('deployDNSVM')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('vmADETemplateURL')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "vmName": {
-            "value": "[variables('dnsVMName')]"
-          },
-          "adeKeyVaultName": {
-            "value": "[parameters('adeKeyVaultName')]"
-          },
-          "keyVaultResourceGroup": {
-            "value": "[parameters('keyVaultResourceGroup')]"
-          }
-        }
 
-      }
-    },
 
     {
       "name": "[variables('deployVMDiagnostics')]",
@@ -244,8 +254,81 @@
           }
         }
       }
-    }
+    },
+    {
+      "comments": "Activate Disk",
+      "name": "[variables('activateDisk')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[variables('deployDNSVM')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('activateDiskTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[variables('dnsVMName')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "assetLocationStorageAccount": {
+            "value": "[variables('assetLocationStorageAccount')]"
+          },
+          "storageAccountKeyviaKeyvault": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('secretsKeyVaultID')]"
+              },
+              "secretName": "[variables('secretName')]"
+            }
+          },
+          "storageAccountSASTokenviaKeyvault": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('secretsKeyVaultID')]"
+              },
+              "secretName": "[variables('secretnameSASurl')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "[variables('encryptVM')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[variables('deployDNSVM')]",
+        "[variables('activateDisk')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('vmADETemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[variables('dnsVMName')]"
+          },
+          "adeKeyVaultName": {
+            "value": "[parameters('adeKeyVaultName')]"
+          },
+          "keyVaultResourceGroup": {
+            "value": "[parameters('adeKeyVaultResourceGroup')]"
+          }
+        }
 
+      }
+    }
   ],
   "outputs": {}
 }
