@@ -8,16 +8,16 @@
         "description": "The VM name"
       }
     },
-    "adminUsername": {
+    "ADDSDomainName": {
       "type": "string",
       "metadata": {
-        "description": "The name of the Administrator of the new VMs and Domain"
+        "description": "ADDS DNS name"
       }
     },
-    "adminPassword": {
+    "ADDSDomainNameIPAddress": {
       "type": "securestring",
       "metadata": {
-        "description": "The password for the Administrator account of the new VMs and Domain"
+        "description": "ADDS DC1 IP address"
       }
     },
     "assetLocationStorageAccount": {
@@ -41,13 +41,13 @@
   },
   "variables": {
     
-    "ModulesURL": "[concat(parameters('assetLocationStorageAccount'),'/scripts/ActivateDisk.zip')]",
-    "ConfigurationFunction": "ActivateDisk.ps1\\ActivateDisk"
+    "ModulesURL": "[concat(parameters('assetLocationStorageAccount'),'/scripts/DeployDNS.zip')]",
+    "ConfigurationFunction": "DeployDNS.ps1\\DeployDNS"
     
   },
   "resources": [
     {
-      "name": "[concat(parameters('vmName'),'/ActivateDisk')]",
+      "name": "[concat(parameters('vmName'),'/DeployDNS')]",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-06-15",
@@ -60,9 +60,11 @@
           "modulesUrl": "[variables('ModulesURL')]",
           "configurationFunction": "[variables('ConfigurationFunction')]",
           "SasToken": "[parameters('storageAccountSASTokenviaKeyvault')]",
+          "ADDSDNSName": "[parameters('ADDSDomainName')]",
+          "ADDSDCIPAddress": "[parameters('ADDSDomainNameIPAddress')]",
           "properties": {
-            
-        
+
+
           }
         },
         "protectedSettings": {

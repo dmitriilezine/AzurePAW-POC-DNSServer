@@ -115,6 +115,20 @@
       "metadata": {
         "description": "The name of the RG where Key Vault is stored"
       }
+    },
+    "ADDSDomainName": {
+      "type": "string",
+      "metadata": {
+        "description": "DNS Name for the ADDS. Conditonal forwarder will be configured to point this DNS server to the ADDS"
+      },
+      "defaultValue": "Replace with your domain name, ie contoso.com. Top level only supported at this time."
+    },
+    "ADDSDomainNameIPAddress": {
+      "type": "string",
+      "metadata": {
+        "description": "IP Address of the first DC. It will be used to configure DNS name with condtional forwarder"
+      },
+      "defaultValue": "10.0.1.4"
     }
   },
   "variables": {
@@ -130,7 +144,7 @@
     "vmDiagnosticsTemplateURL": "[concat(variables('assetLocation'),'/data/vmDiagnostics.json')]",
     "vmAntimalwareTemplateURL": "[concat(variables('assetLocation'),'/data/deployAntimalware.json')]",
     "vmADETemplateURL": "[concat(variables('assetLocation'),'/data/encryptVM.json')]",
-    "activateDiskTemplateURL": "[concat(variables('assetLocation'),'/data/activateDisk.json')]",
+    "deployDNSTemplateURL": "[concat(variables('assetLocation'),'/data/deployDNS.json')]",
 
     "dnsVMName": "[parameters('VMName')]",
 
@@ -141,9 +155,9 @@
     "deployAntimalware": "deployAntimalware",
     "deployAntimalwareId": "[concat('Microsoft.Resources/deployments/', variables('deployAntimalware'))]",
     "encryptVM": "encryptVM",
-    "encryotVMId": "[concat('Microsoft.Resources/deployments/', variables('encryptVM'))]",
-    "activateDisk": "activateDisk",
-    "activateDiskId": "[concat('Microsoft.Resources/deployments/', variables('activateDisk'))]",
+    "encryptVMId": "[concat('Microsoft.Resources/deployments/', variables('encryptVM'))]",
+    "deployDNS": "DeployDNS",
+    "deployDNSId": "[concat('Microsoft.Resources/deployments/', variables('deployDNS'))]",
 
     "secretsVaultName": "[parameters('secretsVaultName')]",
     "secretName": "AzurePAWPOC1SAKey2",
@@ -256,8 +270,8 @@
       }
     },
     {
-      "comments": "Activate Disk",
-      "name": "[variables('activateDisk')]",
+      "comments": "Deploy DNS and activate second Disk",
+      "name": "[variables('deployDNS')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
@@ -266,18 +280,18 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('activateDiskTemplateURL')]",
+          "uri": "[variables('deployDNSTemplateURL')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "vmName": {
             "value": "[variables('dnsVMName')]"
           },
-          "adminUsername": {
-            "value": "[parameters('adminUsername')]"
+          "ADDSDomainName": {
+            "value": "[parameters('ADDSDomainName')]"
           },
-          "adminPassword": {
-            "value": "[parameters('adminPassword')]"
+          "ADDSDomainNameIPAddress": {
+            "value": "[parameters('ADDSDomainNameIPAddress')]"
           },
           "assetLocationStorageAccount": {
             "value": "[variables('assetLocationStorageAccount')]"
@@ -307,7 +321,7 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[variables('deployDNSVM')]",
-        "[variables('activateDisk')]"
+        "[variables('deployDNS')]"
       ],
       "properties": {
         "mode": "Incremental",
