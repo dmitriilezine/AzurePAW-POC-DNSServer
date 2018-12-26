@@ -60,11 +60,10 @@
           "modulesUrl": "[variables('ModulesURL')]",
           "configurationFunction": "[variables('ConfigurationFunction')]",
           "SasToken": "[parameters('storageAccountSASTokenviaKeyvault')]",
-          "ADDSDNSName": "[parameters('ADDSDomainName')]",
-          "ADDSDCIPAddress": "[parameters('ADDSDomainNameIPAddress')]",
+
           "properties": {
-
-
+            "ADDSDNSName": "[parameters('ADDSDomainName')]",
+            "ADDSDCIPAddress": "[parameters('ADDSDomainNameIPAddress')]"
           }
         },
         "protectedSettings": {
